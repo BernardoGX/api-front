@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach de jogos</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="input-wrapper">
+            <textarea 
+             id="situationInput"
+             class="situation-input"
+             placeholder="Digite a sua situação aqui"
+             rows="3"
+             ></textarea>
+        </div>
+
+        <div class="modes-wrapper">
+            <button class="mode-btn active" data-mode="beginner">Modo iniciante</button>
+            <button class="mode-btn" data-mode="advanced">Modo avançado</button>
+            <button class="mode-btn" data-mode="trustable">Modo 100% confiavel</button>
+        </div>
+
+        <div class="submit-wrapper">
+            <button id="submitBtn" class="submit-btn">Clique para enviar a sua situação</button>
+        </div>
+
+        <div class="response-wrapper">
+            <div id="responseBox" class="response-box">
+                <span id="responseText" class="response-placeholder">Retorno da IA</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
