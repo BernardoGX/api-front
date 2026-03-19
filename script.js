@@ -27,17 +27,17 @@ situationInput.addEventListener("keydown", (e) => {
 function buildRequest(situation){
     switch(selectModes){
         case "beginner":
-            return {endpoint: "/api/beginner", body:{situation}}
+            return {endpoint: "/ai/beginner", body:{situation}}
         case "advanced":
-            return {endpoint: "/api/advanced", body:{situation}}
+            return {endpoint: "/ai/advanced", body:{situation}}
         case "trustable":
-            return {endpoint: "/api/trustable", body:{situation}}
+            return {endpoint: "/ai/trustable", body:{situation}}
         default:
-            return {endpoint: "/api/beginner", body:{situation}}
+            return {endpoint: "/ai/beginner", body:{situation}}
     }
 }
 
-function sendSituation(){
+async function sendSituation(){
     const situation = situationInput.value.trim()
     
     if(!situation){
@@ -48,9 +48,52 @@ function sendSituation(){
     setLoading(true)
 
     try{
-        
+
+      const {endpoint, body} = buildRequest(situation)
+
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify(body)
+      })
+
+      if (!response.ok){
+        throw new Error(`Erro HTTP: ${response.status}`)
+      }
+
+      const data = await response.json()
+      const answer = data.answer || data.error || "Sem resposta"
+      showResponse(answer)
+
     } catch (err){
-        
+        showError(`Nâo foi possivel se conectar a API. \n${err.message}`)
+    } finally {
+        setLoading(false)
     }
     
 }
+
+function setLoading(isLoading){
+    submitBtn.disable = isLoading
+    if (isLoading){
+        responseBox.innerHTML = '<span class="loading"></span>'
+    }
+}
+
+function showResponse(text){
+    const span = document.createElement("span")
+    span.className = "response-text"
+    span.textContent = text
+    responseBox.innerHTML = ""
+    responseBox.appendChild(span)
+}
+
+function showError(message){
+    const span = document.createElement("span")
+    span.className = "response-text"
+    span.style.color = "#e25050"
+    span.textContent = message
+    responseBox.innerHTML = ""
+    responseBox.appendChild(span)
+}
+
